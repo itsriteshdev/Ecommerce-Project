@@ -18,14 +18,11 @@ import java.util.stream.Collectors;
 public class SellerServiceImpl implements SellerService {
 
     private final SellerRepository sellerRepository;
-    private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
 
     public SellerServiceImpl(SellerRepository sellerRepository,
-                             ProductRepository productRepository,
                              OrderRepository orderRepository) {
         this.sellerRepository = sellerRepository;
-        this.productRepository = productRepository;
         this.orderRepository = orderRepository;
     }
 

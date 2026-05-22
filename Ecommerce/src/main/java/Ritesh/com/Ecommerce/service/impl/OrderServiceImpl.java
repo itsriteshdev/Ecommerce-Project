@@ -177,7 +177,6 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
 
         // Check if user has permission to view this order
-        boolean isAdmin = order.getCustomer().getUser().getRole() == Role.ROLE_ADMIN; // (or checking via email check, let's fetch current user)
         boolean isCustomer = order.getCustomer().getEmail().equals(email);
         boolean isSeller = order.getSeller().getEmail().equals(email);
 

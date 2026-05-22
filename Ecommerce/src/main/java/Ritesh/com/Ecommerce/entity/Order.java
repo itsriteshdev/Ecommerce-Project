@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import Ritesh.com.Ecommerce.entity.OrderItem;
 
 @Entity
 @Table(name = "orders")

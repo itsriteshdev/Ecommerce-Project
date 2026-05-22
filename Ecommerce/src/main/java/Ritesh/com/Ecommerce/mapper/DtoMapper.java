@@ -2,6 +2,8 @@ package Ritesh.com.Ecommerce.mapper;
 
 import Ritesh.com.Ecommerce.dto.*;
 import Ritesh.com.Ecommerce.entity.*;
+import Ritesh.com.Ecommerce.entity.OrderItem;
+import Ritesh.com.Ecommerce.dto.OrderItemDto;
 
 import java.util.Collections;
 import java.util.stream.Collectors;

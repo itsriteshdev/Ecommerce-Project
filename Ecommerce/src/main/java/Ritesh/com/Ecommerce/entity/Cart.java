@@ -6,6 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import Ritesh.com.Ecommerce.entity.CartItem;
 
 @Entity
 @Table(name = "carts")
