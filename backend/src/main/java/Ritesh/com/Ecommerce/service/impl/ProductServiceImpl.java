@@ -128,7 +128,9 @@ public class ProductServiceImpl implements ProductService {
             Boolean inStock,
             Pageable pageable
     ) {
-        return productRepository.filterProducts(category, brand, minPrice, maxPrice, inStock, pageable)
+        String categoryLower = (category != null) ? category.trim().toLowerCase() : null;
+        String brandLower = (brand != null) ? brand.trim().toLowerCase() : null;
+        return productRepository.filterProducts(categoryLower, brandLower, minPrice, maxPrice, inStock, pageable)
                 .map(DtoMapper::toProductResponseDto);
     }
 }

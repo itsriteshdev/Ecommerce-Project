@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import Ritesh.com.Ecommerce.dto.*;
 import Ritesh.com.Ecommerce.service.ProductService;
+import Ritesh.com.Ecommerce.config.DataSeeder;
 
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -19,9 +20,11 @@ import java.security.Principal;
 public class ProductController {
 
     private final ProductService productService;
+    private final DataSeeder dataSeeder;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, DataSeeder dataSeeder) {
         this.productService = productService;
+        this.dataSeeder = dataSeeder;
     }
 
     @PostMapping
@@ -74,5 +77,16 @@ public class ProductController {
             @RequestParam(required = false) Boolean inStock,
             @PageableDefault(size = 10) Pageable pageable) {
         return ResponseEntity.ok(productService.filterProducts(category, brand, minPrice, maxPrice, inStock, pageable));
+    }
+
+    @GetMapping("/seed")
+    public ResponseEntity<String> seedDatabase() {
+        try {
+            dataSeeder.run();
+            return ResponseEntity.ok("Database seeded successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to seed database: " + e.getMessage());
+        }
     }
 }

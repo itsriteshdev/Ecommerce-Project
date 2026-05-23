@@ -137,7 +137,7 @@ export default function OrderHistory() {
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                       <span style={{ fontSize: '0.8rem', color: 'hsl(var(--text-muted))' }}>Total Amount</span>
                       <span style={{ fontWeight: 800, fontSize: '1.2rem', fontFamily: 'var(--font-display)' }}>
-                        ${order.totalAmount}
+                        ₹{order.totalAmount}
                       </span>
                     </div>
                     {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -162,7 +162,7 @@ export default function OrderHistory() {
                                 </span>
                               </div>
                               <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>
-                                ${item.price} <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))', fontWeight: 'normal' }}>each</span>
+                                ₹{item.price} <span style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))', fontWeight: 'normal' }}>each</span>
                               </span>
                             </div>
                           ))}

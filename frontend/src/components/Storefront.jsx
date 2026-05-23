@@ -1,8 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Star, X, Check, ArrowRight, ShieldCheck, Truck } from 'lucide-react';
+import { ShoppingCart, Star, X, Check, ArrowRight, ShieldCheck, Truck, Sparkles, MessageSquare, Video } from 'lucide-react';
 import { api } from '../api';
 
-const CATEGORIES = ['All', 'Body', 'Home', 'Beauty', 'Sports'];
+const CATEGORIES = ['All', 'Sarees', 'Salwar Kameez', 'Lehengas', 'Indo Western', 'Men', 'Jewellery'];
+
+const CIRCLE_CATEGORIES = [
+  { name: 'Sarees', image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&auto=format&fit=crop&q=80' },
+  { name: 'Salwar Kameez', image: 'https://images.unsplash.com/photo-1631856955409-0912b33f1d2b?w=400&auto=format&fit=crop&q=80' },
+  { name: 'Lehengas', image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400&auto=format&fit=crop&q=80' },
+  { name: 'Indo Western', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&auto=format&fit=crop&q=80' },
+  { name: 'Men', image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=400&auto=format&fit=crop&q=80' },
+  { name: 'Jewellery', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&auto=format&fit=crop&q=80' }
+];
+
+const OCCASIONS = [
+  { name: 'Haldi Ceremony', category: 'Salwar Kameez', image: 'https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?w=600&auto=format&fit=crop&q=80' },
+  { name: 'Sangeet Night', category: 'Lehengas', image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&auto=format&fit=crop&q=80' },
+  { name: 'Wedding Bells', category: 'Sarees', image: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600&auto=format&fit=crop&q=80' },
+  { name: 'Reception Glam', category: 'Indo Western', image: 'https://images.unsplash.com/photo-1549417229-aa67d3263c09?w=600&auto=format&fit=crop&q=80' }
+];
+
 
 // Custom TikTok icon since Lucide doesn't have it natively
 function TikTokIcon({ size = 18 }) {
@@ -85,13 +102,58 @@ function getProductImage(product) {
   return 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=80';
 }
 
-export default function Storefront({ user, searchQuery, onAddToCart, onOpenAuth }) {
+export default function Storefront({
+  user,
+  searchQuery,
+  onAddToCart,
+  onOpenAuth,
+  selectedCategory,
+  setSelectedCategory
+}) {
+  const BANNERS = [
+    {
+      title: "The Saree Edit: Timeless Elegance",
+      subtitle: "Explore our collection of pure silk, georgette, and organza sarees curated for your special moments.",
+      image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1600&auto=format&fit=crop&q=80",
+      category: "Sarees"
+    },
+    {
+      title: "Exquisite Bridal & Party Lehengas",
+      subtitle: "Dazzle in hand-embroidered, mirror work, and velvet lehengas crafted to perfection.",
+      image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=1600&auto=format&fit=crop&q=80",
+      category: "Lehengas"
+    },
+    {
+      title: "Modern Indo-Western Fusion",
+      subtitle: "Chic drape kurtas, dhoti sets, and capes blending traditional crafts with modern silhouettes.",
+      image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=1600&auto=format&fit=crop&q=80",
+      category: "Indo Western"
+    }
+  ];
+
   const [products, setProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailQty, setDetailQty] = useState(1);
   const [loading, setLoading] = useState(false);
   const [actionSuccess, setActionSuccess] = useState(false);
+  const [currentBanner, setCurrentBanner] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBanner((prev) => (prev + 1) % BANNERS.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextBanner = (e) => {
+    e.stopPropagation();
+    setCurrentBanner((prev) => (prev + 1) % BANNERS.length);
+  };
+
+  const prevBanner = (e) => {
+    e.stopPropagation();
+    setCurrentBanner((prev) => (prev - 1 + BANNERS.length) % BANNERS.length);
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -143,17 +205,17 @@ export default function Storefront({ user, searchQuery, onAddToCart, onOpenAuth 
 
   return (
     <>
-      {/* HERO SECTION 1: Soap stack (Screenshot 3) */}
+      {/* HERO SECTION 1: Ethnic couture boutique banner */}
       <section className="hero-stack-section">
         <div className="hero-stack-left">
           <h1 className="hero-stack-title">
-            Just Like Nature<br />Intended
+            Pure Ethnic<br />Craftsmanship
           </h1>
         </div>
         <div className="hero-stack-right">
           <div className="hero-stack-right-content">
-            <h3 className="hero-stack-right-title">Handcrafted Organic</h3>
-            <p className="hero-stack-right-subtitle">Soap & Candles</p>
+            <h3 className="hero-stack-right-title">Ready To Ship</h3>
+            <p className="hero-stack-right-subtitle">Festive Picks</p>
             <button className="btn btn-pill-dark" onClick={scrollToCatalog}>
               SHOP NOW
             </button>
@@ -161,22 +223,169 @@ export default function Storefront({ user, searchQuery, onAddToCart, onOpenAuth 
         </div>
       </section>
 
-      {/* HERO SECTION 2: Candle pouring (Screenshot 2) */}
+      {/* PREMIUM INTERACTIVE BANNER CAROUSEL */}
+      <section className="carousel-section" style={{ position: 'relative', height: '480px', overflow: 'hidden', margin: '40px 0', border: '1px solid hsl(var(--border-light))', backgroundColor: '#000' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+          {BANNERS.map((banner, index) => {
+            const isActive = index === currentBanner;
+            return (
+              <div
+                key={index}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  opacity: isActive ? 1 : 0,
+                  transition: 'opacity 1s ease-in-out',
+                  pointerEvents: isActive ? 'auto' : 'none',
+                  zIndex: isActive ? 2 : 1
+                }}
+              >
+                <img
+                  src={banner.image}
+                  alt={banner.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'brightness(0.7)' }}
+                />
+                
+                {/* Glassmorphic Overlay Content */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '50px',
+                  left: '50px',
+                  right: '50px',
+                  maxWidth: '550px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  padding: '30px',
+                  borderRadius: '16px',
+                  color: '#fff',
+                  boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+                  animation: isActive ? 'slideUpFade 0.8s ease-out' : 'none'
+                }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)', display: 'block', marginBottom: '8px' }}>
+                    Special Feature
+                  </span>
+                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', margin: '0 0 12px 0', fontWeight: '400', lineHeight: 1.2 }}>
+                    {banner.title}
+                  </h2>
+                  <p style={{ fontSize: '0.9rem', margin: '0 0 20px 0', color: 'rgba(255,255,255,0.85)', lineHeight: 1.5 }}>
+                    {banner.subtitle}
+                  </p>
+                  <button 
+                    className="btn btn-pill-outline" 
+                    onClick={() => {
+                      setSelectedCategory(banner.category);
+                      scrollToCatalog();
+                    }}
+                    style={{ borderColor: '#fff', color: '#fff', padding: '10px 24px', fontSize: '0.8rem' }}
+                  >
+                    EXPLORE COLLECTION
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+          
+          {/* Arrow controls */}
+          <button
+            onClick={prevBanner}
+            style={{
+              position: 'absolute',
+              left: '20px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'rgba(0,0,0,0.3)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              color: '#fff',
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              zIndex: 10,
+              backdropFilter: 'blur(4px)',
+              transition: 'background var(--transition-fast)'
+            }}
+            title="Previous Slide"
+          >
+            ←
+          </button>
+          
+          <button
+            onClick={nextBanner}
+            style={{
+              position: 'absolute',
+              right: '20px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'rgba(0,0,0,0.3)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              color: '#fff',
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              zIndex: 10,
+              backdropFilter: 'blur(4px)',
+              transition: 'background var(--transition-fast)'
+            }}
+            title="Next Slide"
+          >
+            →
+          </button>
+
+          {/* Dots Indicators */}
+          <div style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: '10px',
+            zIndex: 10
+          }}>
+            {BANNERS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentBanner(i)}
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  border: 'none',
+                  background: i === currentBanner ? '#fff' : 'rgba(255,255,255,0.4)',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'background var(--transition-fast)'
+                }}
+                aria-label={`Slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HERO SECTION 2: The Royal Bridal Heritage */}
       <section className="hero-candle-section">
         <div className="hero-candle-content">
-          <h2 className="hero-candle-title">Natures Essence Scented Candles</h2>
+          <h2 className="hero-candle-title">The Royal Bridal Heritage</h2>
           <p className="hero-candle-text">
-            I'm a paragraph. Click here to add your own text and edit me. It's easy.
-            Just click "Edit Text" or double click me to add your own content and make changes to the font.
+            Step into a world of pure ethnic luxury. Discover our handpicked bridal lehengas, Banarasi silk sarees, and exquisite Kundan jewellery designed to make your special day truly unforgettable.
           </p>
-          <button className="btn btn-pill-outline" onClick={scrollToCatalog}>
-            SHOP CANDLES
+          <button className="btn btn-pill-outline" onClick={() => { setSelectedCategory('Lehengas'); scrollToCatalog(); }}>
+            EXPLORE BRIDAL EDIT
           </button>
         </div>
         <div className="hero-candle-video-container">
           <img
-            src="https://images.unsplash.com/photo-1603006905003-be475563bc59?w=1000&auto=format&fit=crop&q=80"
-            alt="Candle pouring"
+            src="https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1000&auto=format&fit=crop&q=80"
+            alt="Royal Bridal Lehenga Couture"
             className="hero-candle-img"
           />
           {/* Simulated Video Player Control Bar */}
@@ -190,13 +399,13 @@ export default function Storefront({ user, searchQuery, onAddToCart, onOpenAuth 
             </button>
 
             {/* Time Stamp */}
-            <span className="mock-video-time">00:05/00:06</span>
+            <span className="mock-video-time">00:08/00:10</span>
 
             {/* Progress Bar Seeker */}
             <div className="mock-video-progress-container">
               <div className="mock-video-progress-bg">
-                <div className="mock-video-progress-fill" style={{ width: '83.3%' }}></div>
-                <div className="mock-video-progress-handle" style={{ left: '83.3%' }}></div>
+                <div className="mock-video-progress-fill" style={{ width: '80%' }}></div>
+                <div className="mock-video-progress-handle" style={{ left: '80%' }}></div>
               </div>
             </div>
 
@@ -221,12 +430,71 @@ export default function Storefront({ user, searchQuery, onAddToCart, onOpenAuth 
         </div>
       </section>
 
+      {/* CATEGORY CIRCLES NAVIGATION */}
+      <section className="circle-categories-section" style={{ margin: '50px 0 20px 0' }}>
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2.2rem', fontWeight: 400, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Shop By Category</h2>
+          <div style={{ width: '40px', height: '1px', background: '#000', margin: '10px auto' }}></div>
+        </div>
+        <div className="circle-categories-container">
+          {CIRCLE_CATEGORIES.map((cat) => (
+            <div
+              key={cat.name}
+              className="category-circle-card"
+              onClick={() => {
+                setSelectedCategory(cat.name);
+                scrollToCatalog();
+              }}
+            >
+              <div className="category-circle-img-wrapper" style={{ border: selectedCategory === cat.name ? '2px solid #a0522d' : '2px solid hsl(var(--border-light))' }}>
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  className="category-circle-img"
+                />
+              </div>
+              <span className="category-circle-name" style={{ fontWeight: selectedCategory === cat.name ? 'bold' : '600' }}>
+                {cat.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* SHOP BY OCCASION */}
+      <section className="occasion-section">
+        <h2 className="occasion-title">Shop by Occasion</h2>
+        <p className="occasion-subtitle">Curated ensembles for every wedding celebration & festive ceremony</p>
+        <div className="occasion-grid">
+          {OCCASIONS.map((occ) => (
+            <div
+              key={occ.name}
+              className="occasion-card"
+              onClick={() => {
+                setSelectedCategory(occ.category);
+                scrollToCatalog();
+              }}
+            >
+              <img
+                src={occ.image}
+                alt={occ.name}
+                className="occasion-img"
+              />
+              <div className="occasion-overlay">
+                <h3 className="occasion-name">{occ.name}</h3>
+                <span className="occasion-action">Shop Collection</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* PRODUCT CATALOG SECTION */}
       <div id="catalog-section" className="main-container">
         <div className="catalog-header">
           <h2 className="catalog-title">Our Collection</h2>
           <p style={{ color: 'hsl(var(--text-muted))', maxWidth: '500px', margin: '0 auto' }}>
-            Handcrafted with sustainably sourced ingredients and therapeutic grade essential oils.
+            Premium Indian ethnic wear meticulously crafted for weddings, festivals, and celebrations.
           </p>
         </div>
 
@@ -297,10 +565,10 @@ export default function Storefront({ user, searchQuery, onAddToCart, onOpenAuth 
                     <div className="product-card-footer">
                       <div className="product-price-wrapper">
                         <span className="product-price">
-                          ${hasDiscount ? product.discountPrice : product.price}
+                          ₹{hasDiscount ? product.discountPrice : product.price}
                         </span>
                         {hasDiscount && (
-                          <span className="product-price-original">${product.price}</span>
+                          <span className="product-price-original">₹{product.price}</span>
                         )}
                       </div>
                       <button
@@ -417,10 +685,10 @@ export default function Storefront({ user, searchQuery, onAddToCart, onOpenAuth 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
                   <div className="product-price-wrapper">
                     <span className="product-price" style={{ fontSize: '1.4rem' }}>
-                      ${selectedProduct.discountPrice && selectedProduct.discountPrice < selectedProduct.price ? selectedProduct.discountPrice : selectedProduct.price}
+                      ₹{selectedProduct.discountPrice && selectedProduct.discountPrice < selectedProduct.price ? selectedProduct.discountPrice : selectedProduct.price}
                     </span>
                     {selectedProduct.discountPrice && selectedProduct.discountPrice < selectedProduct.price && (
-                      <span className="product-price-original" style={{ fontSize: '1.1rem' }}>${selectedProduct.price}</span>
+                      <span className="product-price-original" style={{ fontSize: '1.1rem' }}>₹{selectedProduct.price}</span>
                     )}
                   </div>
                 </div>
@@ -496,6 +764,21 @@ export default function Storefront({ user, searchQuery, onAddToCart, onOpenAuth 
           </div>
         </div>
       )}
+      {/* FLOATING ACTION BADGES */}
+      <div className="floating-widgets-container">
+        <button className="floating-widget-btn ai-btn" onClick={() => alert("Shop with AI chatbot coming soon!")}>
+          <span className="floating-widget-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '6px' }}><Sparkles size={14} /></span>
+          <span>Shop with AI</span>
+        </button>
+        <button className="floating-widget-btn" onClick={() => alert("Live chat with our style experts is launching soon!")}>
+          <span className="floating-widget-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '6px' }}><MessageSquare size={14} /></span>
+          <span>Live Chat</span>
+        </button>
+        <button className="floating-widget-btn" onClick={() => alert("Join our upcoming live shopping stream!")}>
+          <span className="floating-widget-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '6px' }}><Video size={14} /></span>
+          <span>Live Shopping</span>
+        </button>
+      </div>
     </>
   );
 }

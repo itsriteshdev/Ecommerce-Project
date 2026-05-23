@@ -38,9 +38,11 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
     setLoading(true);
     try {
       const response = await api.login(email, password);
+      const normalizedRole = response.role ? response.role.replace('ROLE_', '') : '';
+      const normalizedResponse = { ...response, role: normalizedRole };
       localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response));
-      onAuthSuccess(response);
+      localStorage.setItem('user', JSON.stringify(normalizedResponse));
+      onAuthSuccess(normalizedResponse);
       onClose();
     } catch (err) {
       setError(err.message || 'Invalid email or password');
@@ -62,9 +64,11 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
       const response = await api.registerCustomer(payload);
       // Auto login after registration
       const loginRes = await api.login(email, password);
+      const normalizedRole = loginRes.role ? loginRes.role.replace('ROLE_', '') : '';
+      const normalizedResponse = { ...loginRes, role: normalizedRole };
       localStorage.setItem('token', loginRes.token);
-      localStorage.setItem('user', JSON.stringify(loginRes));
-      onAuthSuccess(loginRes);
+      localStorage.setItem('user', JSON.stringify(normalizedResponse));
+      onAuthSuccess(normalizedResponse);
       onClose();
     } catch (err) {
       setError(err.message || 'Registration failed');
@@ -86,9 +90,11 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
       const response = await api.registerSeller(payload);
       // Auto login after registration
       const loginRes = await api.login(email, password);
+      const normalizedRole = loginRes.role ? loginRes.role.replace('ROLE_', '') : '';
+      const normalizedResponse = { ...loginRes, role: normalizedRole };
       localStorage.setItem('token', loginRes.token);
-      localStorage.setItem('user', JSON.stringify(loginRes));
-      onAuthSuccess(loginRes);
+      localStorage.setItem('user', JSON.stringify(normalizedResponse));
+      onAuthSuccess(normalizedResponse);
       onClose();
     } catch (err) {
       setError(err.message || 'Registration failed');

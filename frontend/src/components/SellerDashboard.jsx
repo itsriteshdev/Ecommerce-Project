@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LayoutDashboard, DollarSign, Package, ShoppingCart, Star, Plus, RefreshCw, Edit, Trash2, X, Check, Save } from 'lucide-react';
+import { LayoutDashboard, IndianRupee, Package, ShoppingCart, Star, Plus, RefreshCw, Edit, Trash2, X, Check, Save } from 'lucide-react';
 import { api } from '../api';
 
 export default function SellerDashboard() {
@@ -14,7 +14,7 @@ export default function SellerDashboard() {
   const [formData, setFormData] = useState({
     productName: '',
     description: '',
-    category: 'Electronics',
+    category: 'Sarees',
     brand: '',
     sku: '',
     price: '',
@@ -62,14 +62,14 @@ export default function SellerDashboard() {
     setFormData({
       productName: '',
       description: '',
-      category: 'Electronics',
+      category: 'Sarees',
       brand: '',
       sku: 'SKU-' + Math.floor(Math.random() * 900000 + 100000),
       price: '',
       discountPrice: '',
       stockQuantity: '',
       productImages: '',
-      specificationsText: 'Warranty: 1 Year, Origin: India',
+      specificationsText: 'Fabric: Silk, Origin: India',
       deliveryInfo: 'Delivered within 3-5 business days.'
     });
     setIsFormOpen(true);
@@ -228,11 +228,11 @@ export default function SellerDashboard() {
               <div className="metrics-grid">
                 <div className="metric-card glass-panel">
                   <div className="metric-icon">
-                    <DollarSign size={24} />
+                    <IndianRupee size={24} />
                   </div>
                   <div className="metric-info">
                     <span className="metric-label">Total Revenue</span>
-                    <span className="metric-value">${dashboard?.totalRevenue || 0}</span>
+                    <span className="metric-value">₹{dashboard?.totalRevenue || 0}</span>
                   </div>
                 </div>
 
@@ -290,7 +290,7 @@ export default function SellerDashboard() {
                         <tr key={p.id}>
                           <td style={{ fontWeight: 600 }}>{p.productName}</td>
                           <td>{p.category}</td>
-                          <td>${p.price}</td>
+                          <td>₹{p.price}</td>
                           <td>
                             {p.stockQuantity > 0 ? (
                               <span className="badge badge-success">{p.stockQuantity} In Stock</span>
@@ -348,7 +348,7 @@ export default function SellerDashboard() {
                               ))}
                             </div>
                           </td>
-                          <td style={{ fontWeight: 700 }}>${o.totalAmount}</td>
+                          <td style={{ fontWeight: 700 }}>₹{o.totalAmount}</td>
                           <td>
                             {isEditing ? (
                               <select
@@ -443,10 +443,10 @@ export default function SellerDashboard() {
                           <td>{p.category}</td>
                           <td style={{ fontFamily: 'monospace' }}>{p.sku}</td>
                           <td style={{ fontWeight: 700 }}>
-                            ${p.price}
+                            ₹{p.price}
                             {p.discountPrice && p.discountPrice < p.price && (
                               <span style={{ fontSize: '0.75rem', textDecoration: 'line-through', color: 'hsl(var(--text-muted))', marginLeft: '6px' }}>
-                                ${p.discountPrice}
+                                ₹{p.discountPrice}
                               </span>
                             )}
                           </td>
@@ -530,11 +530,12 @@ export default function SellerDashboard() {
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     style={{ background: 'hsl(var(--bg-surface-elevated))' }}
                   >
-                    <option value="Electronics">Electronics</option>
-                    <option value="Fashion">Fashion</option>
-                    <option value="Home">Home</option>
-                    <option value="Beauty">Beauty</option>
-                    <option value="Sports">Sports</option>
+                    <option value="Sarees">Sarees</option>
+                    <option value="Salwar Kameez">Salwar Kameez</option>
+                    <option value="Lehengas">Lehengas</option>
+                    <option value="Indo Western">Indo Western</option>
+                    <option value="Men">Men</option>
+                    <option value="Jewellery">Jewellery</option>
                   </select>
                 </div>
 
@@ -552,7 +553,7 @@ export default function SellerDashboard() {
 
               <div className="form-grid-3" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
                 <div className="input-group">
-                  <label className="input-label">Price ($)</label>
+                  <label className="input-label">Price (₹)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -565,7 +566,7 @@ export default function SellerDashboard() {
                 </div>
 
                 <div className="input-group">
-                  <label className="input-label">Discount Price ($)</label>
+                  <label className="input-label">Discount Price (₹)</label>
                   <input
                     type="number"
                     step="0.01"

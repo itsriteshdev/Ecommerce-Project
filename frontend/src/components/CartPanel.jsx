@@ -121,7 +121,7 @@ export default function CartPanel({
                       <img src={imgUrl} alt={product.productName} className="cart-item-img" />
                       <div className="cart-item-details">
                         <h4 className="cart-item-name">{product.productName}</h4>
-                        <span className="cart-item-price">${price}</span>
+                        <span className="cart-item-price">₹{price}</span>
 
                         <div className="cart-item-actions">
                           <div className="qty-counter">
@@ -262,12 +262,12 @@ export default function CartPanel({
           <div className="drawer-footer">
             <div className="summary-row">
               <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>₹{subtotal.toFixed(2)}</span>
             </div>
             {discountAmount > 0 && (
               <div className="summary-row" style={{ color: 'hsl(var(--success))' }}>
                 <span>Coupon Discount</span>
-                <span>-${discountAmount.toFixed(2)}</span>
+                <span>-₹{discountAmount.toFixed(2)}</span>
               </div>
             )}
             <div className="summary-row">
@@ -276,7 +276,7 @@ export default function CartPanel({
             </div>
             <div className="summary-row total">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>₹{total.toFixed(2)}</span>
             </div>
 
             {!checkoutStep ? (

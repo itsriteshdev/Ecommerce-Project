@@ -5,6 +5,8 @@ import AuthModal from './components/AuthModal';
 import CartPanel from './components/CartPanel';
 import OrderHistory from './components/OrderHistory';
 import SellerDashboard from './components/SellerDashboard';
+import AdminDashboard from './components/AdminDashboard';
+import CustomerDashboard from './components/CustomerDashboard';
 import { api } from './api';
 
 export default function App() {
@@ -14,6 +16,7 @@ export default function App() {
   const [cart, setCart] = useState(null);
   const [activeTab, setActiveTab] = useState('storefront');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   // Load session from localStorage on mount
   useEffect(() => {
@@ -21,10 +24,15 @@ export default function App() {
     if (savedUser) {
       try {
         const u = JSON.parse(savedUser);
-        setUser(u);
-        if (u.role === 'SELLER') {
+        const normalizedRole = u.role ? u.role.replace('ROLE_', '') : '';
+        const normalizedUser = { ...u, role: normalizedRole };
+        setUser(normalizedUser);
+        if (normalizedRole === 'SELLER') {
           setActiveTab('seller');
-        } else if (u.role === 'CUSTOMER') {
+        } else if (normalizedRole === 'ADMIN') {
+          setActiveTab('admin');
+        } else if (normalizedRole === 'CUSTOMER') {
+          setActiveTab('customer');
           loadCart();
         }
       } catch (e) {
@@ -46,12 +54,20 @@ export default function App() {
   };
 
   const handleAuthSuccess = (userData) => {
-    setUser(userData);
-    if (userData.role === 'SELLER') {
+    const normalizedRole = userData.role ? userData.role.replace('ROLE_', '') : '';
+    const normalizedUser = { ...userData, role: normalizedRole };
+    setUser(normalizedUser);
+    localStorage.setItem('user', JSON.stringify(normalizedUser));
+
+    if (normalizedRole === 'SELLER') {
       setActiveTab('seller');
+    } else if (normalizedRole === 'ADMIN') {
+      setActiveTab('admin');
+    } else if (normalizedRole === 'CUSTOMER') {
+      setActiveTab('customer');
+      loadCart();
     } else {
       setActiveTab('storefront');
-      loadCart();
     }
   };
 
@@ -81,7 +97,7 @@ export default function App() {
   const handleCheckoutSuccess = () => {
     setCart(null); // Clear cart state locally
     loadCart(); // Sync with backend
-    setActiveTab('orders'); // Redirect to orders history
+    setActiveTab('customer'); // Redirect to customer dashboard
   };
 
   const getCartCount = () => {
@@ -101,6 +117,8 @@ export default function App() {
         setActiveTab={setActiveTab}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
       />
 
       <main style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
@@ -110,18 +128,26 @@ export default function App() {
             searchQuery={searchQuery}
             onAddToCart={handleAddToCart}
             onOpenAuth={() => setIsAuthOpen(true)}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
           />
         )}
 
-        {activeTab === 'orders' && user && user.role === 'CUSTOMER' && (
+        {activeTab === 'customer' && user && user.role === 'CUSTOMER' && (
           <div className="main-container">
-            <OrderHistory />
+            <CustomerDashboard onAddToCart={handleAddToCart} />
           </div>
         )}
 
         {activeTab === 'seller' && user && user.role === 'SELLER' && (
           <div className="main-container">
             <SellerDashboard />
+          </div>
+        )}
+
+        {activeTab === 'admin' && user && user.role === 'ADMIN' && (
+          <div className="main-container">
+            <AdminDashboard />
           </div>
         )}
       </main>

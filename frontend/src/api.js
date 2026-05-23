@@ -146,4 +146,50 @@ export const api = {
   // Seller Dashboard
   getSellerDashboard: () =>
     request('/api/seller/dashboard'),
+
+  // Admin
+  getAllSellers: () =>
+    request('/api/admin/sellers'),
+
+  verifySeller: (sellerId, status) =>
+    request(`/api/admin/sellers/${sellerId}/verify?status=${status}`, {
+      method: 'PUT',
+    }),
+
+  createCoupon: (couponDto) =>
+    request('/api/admin/coupons', {
+      method: 'POST',
+      body: JSON.stringify(couponDto),
+    }),
+
+  getAllCoupons: () =>
+    request('/api/admin/coupons'),
+
+  deleteCoupon: (couponId) =>
+    request(`/api/admin/coupons/${couponId}`, {
+      method: 'DELETE',
+    }),
+
+  // Customer Profile & Wishlist
+  getProfile: () =>
+    request('/api/customer/profile'),
+
+  updateProfile: (profileData) =>
+    request('/api/customer/profile', {
+      method: 'PUT',
+      body: JSON.stringify(profileData),
+    }),
+
+  addToWishlist: (productId) =>
+    request(`/api/customer/wishlist/${productId}`, {
+      method: 'POST',
+    }),
+
+  removeFromWishlist: (productId) =>
+    request(`/api/customer/wishlist/${productId}`, {
+      method: 'DELETE',
+    }),
+
+  getWishlist: () =>
+    request('/api/customer/wishlist'),
 };
