@@ -36,7 +36,7 @@ export default function CartPanel({
     setError('');
     const code = couponCode.trim().toUpperCase();
     if (!code) return;
-    
+
     // Simulate frontend validation check
     if (code === 'WELCOME10') {
       setDiscountPercent(10);

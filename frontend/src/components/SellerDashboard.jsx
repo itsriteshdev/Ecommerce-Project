@@ -77,7 +77,7 @@ export default function SellerDashboard() {
 
   const handleOpenEditForm = (prod) => {
     setEditingProduct(prod);
-    
+
     // Parse specs map to comma separated text
     let specText = '';
     if (prod.specifications) {
@@ -104,7 +104,7 @@ export default function SellerDashboard() {
 
   const handleProductSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Parse specifications text e.g., "Color: Black, Material: Leather" -> { Color: "Black", Material: "Leather" }
     const specsMap = {};
     if (formData.specificationsText) {

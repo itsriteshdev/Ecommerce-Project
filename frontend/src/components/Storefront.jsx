@@ -245,7 +245,7 @@ export default function Storefront({
                   alt={banner.title}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'brightness(0.7)' }}
                 />
-                
+
                 {/* Glassmorphic Overlay Content */}
                 <div style={{
                   position: 'absolute',
@@ -272,8 +272,8 @@ export default function Storefront({
                   <p style={{ fontSize: '0.9rem', margin: '0 0 20px 0', color: 'rgba(255,255,255,0.85)', lineHeight: 1.5 }}>
                     {banner.subtitle}
                   </p>
-                  <button 
-                    className="btn btn-pill-outline" 
+                  <button
+                    className="btn btn-pill-outline"
                     onClick={() => {
                       setSelectedCategory(banner.category);
                       scrollToCatalog();
@@ -286,7 +286,7 @@ export default function Storefront({
               </div>
             );
           })}
-          
+
           {/* Arrow controls */}
           <button
             onClick={prevBanner}
@@ -313,7 +313,7 @@ export default function Storefront({
           >
             ←
           </button>
-          
+
           <button
             onClick={nextBanner}
             style={{
@@ -681,7 +681,7 @@ export default function Storefront({
                   {selectedProduct.category}
                 </span>
                 <h2 style={{ fontSize: '2rem', marginBottom: '14px', fontWeight: '400' }}>{selectedProduct.productName}</h2>
-                
+
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
                   <div className="product-price-wrapper">
                     <span className="product-price" style={{ fontSize: '1.4rem' }}>
@@ -742,7 +742,7 @@ export default function Storefront({
                       Temporarily Sold Out
                     </button>
                   )}
-                  
+
                   {selectedProduct.specifications && Object.keys(selectedProduct.specifications).length > 0 && (
                     <div style={{ marginTop: '24px' }}>
                       <h4 style={{ fontSize: '0.75rem', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'hsl(var(--text-muted))', fontWeight: 600 }}>

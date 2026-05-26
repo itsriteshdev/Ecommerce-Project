@@ -105,21 +105,25 @@ export default function App() {
     return cart.items.reduce((sum, item) => sum + item.quantity, 0);
   };
 
+  const isAdmin = activeTab === 'admin' && user && user.role === 'ADMIN';
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Navbar
-        user={user}
-        onOpenAuth={() => setIsAuthOpen(true)}
-        onLogout={handleLogout}
-        cartCount={getCartCount()}
-        onOpenCart={() => setIsCartOpen(true)}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
+      {!isAdmin && (
+        <Navbar
+          user={user}
+          onOpenAuth={() => setIsAuthOpen(true)}
+          onLogout={handleLogout}
+          cartCount={getCartCount()}
+          onOpenCart={() => setIsCartOpen(true)}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+      )}
 
       <main style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         {activeTab === 'storefront' && (
@@ -146,9 +150,7 @@ export default function App() {
         )}
 
         {activeTab === 'admin' && user && user.role === 'ADMIN' && (
-          <div className="main-container">
-            <AdminDashboard />
-          </div>
+          <AdminDashboard onLogout={handleLogout} />
         )}
       </main>
 

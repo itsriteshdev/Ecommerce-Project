@@ -150,7 +150,7 @@ export const api = {
   // Admin
   getAllSellers: () =>
     request('/api/admin/sellers'),
-
+  
   verifySeller: (sellerId, status) =>
     request(`/api/admin/sellers/${sellerId}/verify?status=${status}`, {
       method: 'PUT',
@@ -169,6 +169,40 @@ export const api = {
     request(`/api/admin/coupons/${couponId}`, {
       method: 'DELETE',
     }),
+
+  getAdminDashboardStats: () =>
+    request('/api/admin/metrics'),
+
+  getAdminOrders: () =>
+    request('/api/admin/orders'),
+
+  getAdminProducts: () =>
+    request('/api/admin/products'),
+
+  deleteProductAdmin: (productId) =>
+    request(`/api/admin/products/${productId}`, {
+      method: 'DELETE',
+    }),
+
+  getAdminCustomers: () =>
+    request('/api/admin/customers'),
+
+  toggleCustomerStatus: (customerId, status) =>
+    request(`/api/admin/customers/${customerId}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
+    }),
+
+  getAdminReviews: () =>
+    request('/api/admin/reviews'),
+
+  deleteReviewAdmin: (reviewId) =>
+    request(`/api/admin/reviews/${reviewId}`, {
+      method: 'DELETE',
+    }),
+
+  getAdminCategories: () =>
+    request('/api/admin/categories'),
 
   // Customer Profile & Wishlist
   getProfile: () =>
