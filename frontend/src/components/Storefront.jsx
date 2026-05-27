@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Star, X, Check, ArrowRight, ShieldCheck, Truck, Sparkles, MessageSquare, Video } from 'lucide-react';
 import { api } from '../api';
+import ProductDetails from './ProductDetails';
 
 const CATEGORIES = ['All', 'Sarees', 'Salwar Kameez', 'Lehengas', 'Indo Western', 'Men', 'Jewellery'];
 
@@ -195,13 +196,25 @@ export default function Storefront({
       return;
     }
     try {
-      await onAddToCart(product.id, qty);
+      await onAddToCart(product.productId, qty);
       setActionSuccess(true);
       setTimeout(() => setActionSuccess(false), 2000);
     } catch (err) {
       alert(err.message || "Failed to add to cart");
     }
   };
+
+  if (selectedProduct) {
+    return (
+      <ProductDetails
+        product={selectedProduct}
+        user={user}
+        onAddToCart={onAddToCart}
+        onOpenAuth={onOpenAuth}
+        onBack={() => setSelectedProduct(null)}
+      />
+    );
+  }
 
   return (
     <>
@@ -531,7 +544,7 @@ export default function Storefront({
               const hasDiscount = product.discountPrice && product.discountPrice < product.price;
               return (
                 <div
-                  key={product.id}
+                  key={product.productId}
                   className="product-card"
                   onClick={() => {
                     setSelectedProduct(product);

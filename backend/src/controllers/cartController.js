@@ -17,7 +17,7 @@ const getOrCreateCart = async (customerId) => {
 // Helper to retrieve cart items with product details
 const getCartItemsWithProduct = async (cartId) => {
   const itemsRes = await db.query(
-    `SELECT ci.*, p.product_name, p.sku, p.price, p.discount_price,
+    `SELECT ci.*, p.product_name, p.sku, p.price, p.discount_price, p.brand,
             (SELECT image_url FROM product_images WHERE product_id = p.product_id LIMIT 1) as image_url
      FROM cart_items ci
      JOIN products p ON ci.product_id = p.product_id

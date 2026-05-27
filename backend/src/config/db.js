@@ -49,5 +49,23 @@ module.exports = {
     console.log(`[SQL] ${text} | Params: ${JSON.stringify(params || [])}`);
     return pool.query(text, params);
   },
+  transaction: async (callback) => {
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      const result = await callback(client);
+      await client.query('COMMIT');
+      return result;
+    } catch (err) {
+      try {
+        await client.query('ROLLBACK');
+      } catch (rollbackErr) {
+        console.error('Rollback failed:', rollbackErr);
+      }
+      throw err;
+    } finally {
+      client.release();
+    }
+  },
   pool
 };

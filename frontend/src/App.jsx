@@ -164,6 +164,7 @@ export default function App() {
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         cart={cart}
+        user={user}
         onUpdateQty={handleUpdateCartQty}
         onRemoveItem={handleRemoveCartItem}
         onCheckoutSuccess={handleCheckoutSuccess}

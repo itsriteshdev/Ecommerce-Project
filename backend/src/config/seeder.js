@@ -531,6 +531,21 @@ const seedData = async () => {
       }
       console.log("Seeded default reviews for testing!");
     }
+
+    // Seed default coupons
+    const couponsCountRes = await db.query("SELECT COUNT(*) FROM coupons");
+    const couponsCount = parseInt(couponsCountRes.rows[0].count, 10);
+    if (couponsCount === 0) {
+      await db.query(`
+        INSERT INTO coupons (code, discount_percentage, max_discount_amount, expiry_date, active)
+        VALUES 
+          ('WELCOME10', 10.00, 500.00, NOW() + INTERVAL '1 year', true),
+          ('VELOCE20', 20.00, 1000.00, NOW() + INTERVAL '1 year', true),
+          ('JAYPORE20', 20.00, 1000.00, NOW() + INTERVAL '1 year', true)
+        ON CONFLICT (code) DO NOTHING
+      `);
+      console.log("Seeded default coupons (WELCOME10, VELOCE20, JAYPORE20) successfully!");
+    }
   } catch (err) {
     console.error("Error during database seeding:", err);
   }

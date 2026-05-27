@@ -59,31 +59,30 @@ const registerCustomer = async (req, res, next) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Transaction for user, customer and cart creation
-    await db.query('BEGIN');
+    // Run transaction
+    const customer = await db.transaction(async (client) => {
+      const userRes = await client.query(
+        'INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING id',
+        [email, hashedPassword, 'ROLE_CUSTOMER']
+      );
+      const userId = userRes.rows[0].id;
 
-    const userRes = await db.query(
-      'INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING id',
-      [email, hashedPassword, 'ROLE_CUSTOMER']
-    );
-    const userId = userRes.rows[0].id;
+      const customerRes = await client.query(
+        `INSERT INTO customers (id, full_name, email, phone_number, gender, address, city, state, pincode, account_status)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
+        [userId, fullName, email, phoneNumber || null, gender || null, address || null, city || null, state || null, pincode || null, 'ACTIVE']
+      );
 
-    const customerRes = await db.query(
-      `INSERT INTO customers (id, full_name, email, phone_number, gender, address, city, state, pincode, account_status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
-      [userId, fullName, email, phoneNumber || null, gender || null, address || null, city || null, state || null, pincode || null, 'ACTIVE']
-    );
+      await client.query(
+        'INSERT INTO carts (customer_id, total_amount) VALUES ($1, $2)',
+        [userId, 0.00]
+      );
 
-    await db.query(
-      'INSERT INTO carts (customer_id, total_amount) VALUES ($1, $2)',
-      [userId, 0.00]
-    );
+      return customerRes.rows[0];
+    });
 
-    await db.query('COMMIT');
-
-    res.status(201).json(toCustomerResponseDto(customerRes.rows[0]));
+    res.status(201).json(toCustomerResponseDto(customer));
   } catch (err) {
-    await db.query('ROLLBACK');
     next(err);
   }
 };
@@ -103,25 +102,25 @@ const registerSeller = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await db.query('BEGIN');
+    // Run transaction
+    const seller = await db.transaction(async (client) => {
+      const userRes = await client.query(
+        'INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING id',
+        [email, hashedPassword, 'ROLE_SELLER']
+      );
+      const userId = userRes.rows[0].id;
 
-    const userRes = await db.query(
-      'INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING id',
-      [email, hashedPassword, 'ROLE_SELLER']
-    );
-    const userId = userRes.rows[0].id;
+      const sellerRes = await client.query(
+        `INSERT INTO sellers (seller_id, seller_name, business_name, gst_number, email, phone_number, warehouse_address, bank_details, verification_status, revenue, ratings)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+        [userId, sellerName, businessName, gstNumber || null, email, phoneNumber || null, warehouseAddress || null, bankDetails || null, 'PENDING', 0.00, 0.0]
+      );
 
-    const sellerRes = await db.query(
-      `INSERT INTO sellers (seller_id, seller_name, business_name, gst_number, email, phone_number, warehouse_address, bank_details, verification_status, revenue, ratings)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
-      [userId, sellerName, businessName, gstNumber || null, email, phoneNumber || null, warehouseAddress || null, bankDetails || null, 'PENDING', 0.00, 0.0]
-    );
+      return sellerRes.rows[0];
+    });
 
-    await db.query('COMMIT');
-
-    res.status(201).json(toSellerResponseDto(sellerRes.rows[0]));
+    res.status(201).json(toSellerResponseDto(seller));
   } catch (err) {
-    await db.query('ROLLBACK');
     next(err);
   }
 };

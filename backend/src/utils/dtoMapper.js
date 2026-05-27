@@ -69,6 +69,9 @@ const toCartItemDto = (item) => {
     productSku: item.sku,
     productImage: item.image_url || null,
     price: parseFloat(item.discount_price || item.price),
+    originalPrice: parseFloat(item.price),
+    discountPrice: item.discount_price ? parseFloat(item.discount_price) : null,
+    brand: item.brand || null,
     quantity: parseInt(item.quantity, 10),
     subtotal: parseFloat(item.subtotal)
   };
