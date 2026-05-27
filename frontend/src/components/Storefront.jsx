@@ -109,7 +109,8 @@ export default function Storefront({
   onAddToCart,
   onOpenAuth,
   selectedCategory,
-  setSelectedCategory
+  setSelectedCategory,
+  onOpenAIChat
 }) {
   const BANNERS = [
     {
@@ -779,7 +780,7 @@ export default function Storefront({
       )}
       {/* FLOATING ACTION BADGES */}
       <div className="floating-widgets-container">
-        <button className="floating-widget-btn ai-btn" onClick={() => alert("Shop with AI chatbot coming soon!")}>
+        <button className="floating-widget-btn ai-btn" onClick={onOpenAIChat}>
           <span className="floating-widget-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '6px' }}><Sparkles size={14} /></span>
           <span>Shop with AI</span>
         </button>

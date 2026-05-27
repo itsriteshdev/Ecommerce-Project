@@ -170,7 +170,7 @@ export default function Navbar({
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <a href="#account" onClick={handleAccountClick} className="nav-icon-btn" style={{ color: 'inherit', padding: '4px', display: 'flex', alignItems: 'center', gap: '4px' }} title="My Account">
                 <User size={18} />
-                {user && (
+                {user && user.email && (
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase' }}>
                     {user.email.split('@')[0]}
                   </span>

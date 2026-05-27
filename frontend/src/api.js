@@ -226,4 +226,11 @@ export const api = {
 
   getWishlist: () =>
     request('/api/customer/wishlist'),
+
+  // AI Chatbot
+  sendChatMessage: (message, history = []) =>
+    request('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify({ message, history }),
+    }),
 };

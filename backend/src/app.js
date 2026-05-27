@@ -16,13 +16,14 @@ const sellerRoutes = require('./routes/seller');
 const adminRoutes = require('./routes/admin');
 const notificationRoutes = require('./routes/notifications');
 const reviewRoutes = require('./routes/reviews');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5174', 'http://127.0.0.1:5174'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Authorization', 'Content-Type', 'Cache-Control'],
   credentials: true
@@ -45,6 +46,7 @@ app.use('/api/seller', sellerRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Global Error Handler
 app.use(errorHandler);

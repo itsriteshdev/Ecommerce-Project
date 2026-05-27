@@ -7,12 +7,14 @@ import OrderHistory from './components/OrderHistory';
 import SellerDashboard from './components/SellerDashboard';
 import AdminDashboard from './components/AdminDashboard';
 import CustomerDashboard from './components/CustomerDashboard';
+import AIChatbot from './components/AIChatbot';
 import { api } from './api';
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const [cart, setCart] = useState(null);
   const [activeTab, setActiveTab] = useState('storefront');
   const [searchQuery, setSearchQuery] = useState('');
@@ -106,10 +108,11 @@ export default function App() {
   };
 
   const isAdmin = activeTab === 'admin' && user && user.role === 'ADMIN';
+  const isSeller = activeTab === 'seller' && user && user.role === 'SELLER';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {!isAdmin && (
+      {!isAdmin && !isSeller && (
         <Navbar
           user={user}
           onOpenAuth={() => setIsAuthOpen(true)}
@@ -134,6 +137,7 @@ export default function App() {
             onOpenAuth={() => setIsAuthOpen(true)}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
+            onOpenAIChat={() => setIsAIChatOpen(true)}
           />
         )}
 
@@ -144,9 +148,7 @@ export default function App() {
         )}
 
         {activeTab === 'seller' && user && user.role === 'SELLER' && (
-          <div className="main-container">
-            <SellerDashboard />
-          </div>
+          <SellerDashboard user={user} onLogout={handleLogout} />
         )}
 
         {activeTab === 'admin' && user && user.role === 'ADMIN' && (
@@ -168,6 +170,14 @@ export default function App() {
         onUpdateQty={handleUpdateCartQty}
         onRemoveItem={handleRemoveCartItem}
         onCheckoutSuccess={handleCheckoutSuccess}
+      />
+
+      <AIChatbot
+        isOpen={isAIChatOpen}
+        onClose={() => setIsAIChatOpen(false)}
+        user={user}
+        onOpenAuth={() => setIsAuthOpen(true)}
+        onAddToCart={handleAddToCart}
       />
     </div>
   );
